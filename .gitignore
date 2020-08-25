@@ -1,4 +1,7 @@
 node_modules
+__tests__/jest-tmp
+
 dist
+
 
 .env
