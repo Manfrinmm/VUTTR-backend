@@ -24,9 +24,20 @@
         "argsIgnore": "_"
       }
     ],
-    "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
     "prettier/prettier": "error",
     "no-useless-constructor": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      }
+    ],
     "import-helpers/order-imports": [
       "warn",
       {
