@@ -4,7 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
+
+import User from "../../users/entities/User";
 
 @Entity("tools")
 export default class Tool {
@@ -13,6 +17,10 @@ export default class Tool {
 
   @Column()
   user_id: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "user_id" })
+  user: User;
 
   @Column()
   title: string;
