@@ -13,7 +13,7 @@ import User from "../../users/entities/User";
 @Entity("tools")
 export default class Tool {
   @PrimaryGeneratedColumn("increment")
-  id: string;
+  id: number;
 
   @Column()
   user_id: string;

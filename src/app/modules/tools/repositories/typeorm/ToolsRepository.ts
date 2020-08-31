@@ -2,6 +2,7 @@ import { Repository, getRepository } from "typeorm";
 
 import ICreateToolDTO from "../../dtos/ICreateToolDTO";
 import IFindToolByUserDTO from "../../dtos/IFindToolByUserDTO";
+import IUpdateToolDTO from "../../dtos/IUpdateToolDTO";
 import Tool from "../../entities/Tool";
 import IToolsRepository from "../IToolsRepository";
 
@@ -32,7 +33,16 @@ export default class ToolsRepository implements IToolsRepository {
     return tool;
   }
 
-  async findAllByUser({ user_id, tags }: IFindToolByUserDTO): Promise<Tool[]> {
+  public async findById(id: number): Promise<Tool> {
+    const tool = await this.ormRepository.findOne(id);
+
+    return tool;
+  }
+
+  public async findAllByUser({
+    user_id,
+    tags,
+  }: IFindToolByUserDTO): Promise<Tool[]> {
     let tools: Tool[] = [];
 
     tools = await this.ormRepository.find({
@@ -60,5 +70,15 @@ export default class ToolsRepository implements IToolsRepository {
     }
 
     return toolsFiltered;
+  }
+
+  public async update(data: IUpdateToolDTO): Promise<Tool> {
+    const tool = await this.ormRepository.save(data);
+
+    return tool;
+  }
+
+  public async delete(tool: Tool): Promise<void> {
+    await this.ormRepository.remove(tool);
   }
 }
