@@ -1,0 +1,418 @@
+openapi: 3.0.0
+
+info:
+  title: "VUTTR API"
+  version: "1.0"
+  description: "API para a aplicação VUTTR (Very Useful Tools to Remember).
+    A aplicação é um simples repositório para gerenciar ferramentas
+    com seus respectivos nomes, links, descrições e tags."
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor localhost para testes
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f36e53b7-bd66-4844-af56-e4d4273f933b
+        email:
+          type: string
+          example: matheus_poow@hotmail.com
+        password:
+          type: string
+          example: "123"
+        created_at:
+          type: string
+          example: "2020-08-25T17:24:04.765Z"
+        updated_at:
+          type: string
+          example: "2020-08-26T17:28:04.765Z"
+    Tool:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 2
+        user_id:
+          type: string
+          example: f36e53b7-bd66-4844-af56-e4d4273f933b
+        title:
+          type: string
+          example: hotel
+        link:
+          type: string
+          example: https://github.com/typicode/hotel
+        description:
+          type: string
+          example: "Local app manager. Start apps within your browser,
+            developer tool with local. localhost domain and https out of
+            the box."
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["node", "organizing", "webapps", "domain"]
+        created_at:
+          type: string
+          example: "2020-08-25T17:24:04.765Z"
+        updated_at:
+          type: string
+          example: "2020-08-26T17:28:04.765Z"
+    CreateTool:
+      type: object
+      properties:
+        title:
+          type: string
+          example: hotel
+        link:
+          type: string
+          example: https://github.com/typicode/hotel
+        description:
+          type: string
+          example: "Local app manager. Start apps within your browser,
+            developer tool with local. localhost domain and https out of
+            the box."
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["node", "organizing", "webapps", "domain"]
+    TokenMissing:
+      description: Schema do erro quando o token não é fornecido
+      type: object
+      properties:
+        type:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Token is missing
+    TokenInvalid:
+      description: Schema do erro quando o token não é válido
+      type: object
+      properties:
+        type:
+          type: string
+          example: error
+        message:
+          type: string
+          example: Token is not valid
+    ForbiddenAction:
+      description: Schema do erro quando o usuário não tem permissão
+      type: object
+      properties:
+        type:
+          type: string
+          example: error
+        message:
+          type: string
+          example: You are not allowed to delete this tool.
+  securitySchemes:
+    token:
+      description: Token adquirido na rota `/sessions`.
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+tags:
+  - name: "Users"
+    description: "Operações sobre o usuário"
+
+  - name: "Sessions"
+    description: "Operações sobre autenticação de usuários"
+
+  - name: "Tools"
+    description: "Operações sobre as ferramentas"
+
+paths:
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Cria um usuário
+      description: "Esse usuário criado irá criar novas tools e automaticamente
+        será relacionado à ele"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Matheus Menezes Manfrin
+                email:
+                  type: string
+                  example: matheus_poow@hotmail.com
+                password:
+                  type: string
+                  example: "123"
+      responses:
+        201:
+          description: Uma resposta com os dados do usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                {
+                  "id": "f36e53b7-bd66-4844-af56-e4d4273f933b",
+                  "name": "Matheus Menezes Manfrin",
+                  "email": "matheus_poow@hotmail.com",
+                  "created_at": "2020-08-28T17:24:04.765Z",
+                  "updated_at": "2020-08-28T17:24:04.765Z",
+                }
+        400:
+          description: Erro quando o email fornecido já está sendo utilizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Email already used
+
+  /sessions:
+    post:
+      tags:
+        - Sessions
+      summary: Cria um token para o usuário.
+      description: "Esse token criado deve ser usado nas próximas requisições
+        em rotas que são privadas"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: matheus_poow@hotmail.com
+                password:
+                  type: string
+                  example: "123"
+      responses:
+        201:
+          description: "Uma resposta em formato JSON com os dados do usuário
+            e o token criado"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTg5MjMyNjUsImV4cCI6MTU5OTAwOTY2NSwic3ViIjoiZjM2ZTUzYjctYmQ2Ni00ODQ0LWFmNTYtZTRkNDI3M2Y5MzNiIn0.K2M8a-7mnuY-Ekc9oR2FQIqNb-Zpmbc3L2aZYgc_1XQ"
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "f36e53b7-bd66-4844-af56-e4d4273f933b"
+                      name:
+                        type: string
+                        example: "Matheus Menezes Manfrin"
+                      email:
+                        type: string
+                        example: "matheus_poow@hotmail.com"
+                      created_at:
+                        type: string
+                        example: "2020-08-28T17:24:04.765Z"
+                      updated_at:
+                        type: string
+                        example: "2020-08-28T17:24:04.765Z"
+              example:
+                {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTg5MjMyNjUsImV4cCI6MTU5OTAwOTY2NSwic3ViIjoiZjM2ZTUzYjctYmQ2Ni00ODQ0LWFmNTYtZTRkNDI3M2Y5MzNiIn0.K2M8a-7mnuY-Ekc9oR2FQIqNb-Zpmbc3L2aZYgc_1XQ",
+                  "user":
+                    {
+                      "id": "f36e53b7-bd66-4844-af56-e4d4273f933b",
+                      "name": "Matheus Menezes Manfrin",
+                      "email": "matheus_poow@hotmail.com",
+                      "created_at": "2020-08-28T17:24:04.765Z",
+                      "updated_at": "2020-08-28T17:24:04.765Z",
+                    },
+                }
+        400:
+          description: Erro quando as credenciais de acesso estiverem incorretos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Incorrect credentials. Try again.
+
+  /tools:
+    get:
+      tags:
+        - Tools
+      summary: Exibir todas as tools
+      description: "Essa rota serve para que o usuário autenticado visualize
+        todas suas tools cadastradas"
+      security:
+        - token: []
+      parameters:
+        - in: query
+          name: tags
+          description: Procure por tags especificas separadas por virgula
+          example: node, organizing
+          schema:
+            type: string
+      responses:
+        200:
+          description: Resposta com os dados das tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tool"
+        400:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/TokenMissing"
+                  - $ref: "#/components/schemas/Tool"
+        401:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenInvalid"
+        403:
+          description: "Erro quando o usuário autenticado não tem permissão
+            para executar essa ação"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenAction"
+    post:
+      tags:
+        - Tools
+      summary: Cria uma nova tool
+      description: "Essa rota serve para que o usuário autenticado crie
+        novas tools"
+      security:
+        - token: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTool"
+      responses:
+        201:
+          description: "Uma resposta em formato JSON com os dados da tool
+            criado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tool"
+        400:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenMissing"
+        401:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenInvalid"
+
+  /tools/{tool_id}:
+    parameters:
+      - in: path
+        name: tool_id
+        schema:
+          type: number
+          example: 2
+        description: "`id` da tool já cadastrada pelo usuário"
+        required: true
+    put:
+      tags:
+        - "Tools"
+      summary: "Atualiza uma tool"
+      description: "Essa rota serve para que o usuário autenticado edite
+        uma tool"
+      security:
+        - token: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTool"
+      responses:
+        200:
+          description: "Retorna a tool atualizada"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tool"
+        400:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenMissing"
+        401:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenInvalid"
+        403:
+          description: "Erro quando o usuário autenticado não tem permissão
+            para executar essa ação"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenAction"
+    delete:
+      tags:
+        - "Tools"
+      summary: "Deleta uma tool"
+      description: Essa rota serve para que o usuário autenticado delete uma tool
+      security:
+        - token: []
+      responses:
+        204:
+          description: Tool deletada com sucesso
+        400:
+          description: Erro quando o token não é fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenMissing"
+        401:
+          description: Erro quando o token não é válido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenInvalid"
+        403:
+          description: "Erro quando o usuário autenticado não tem permissão
+            para executar essa ação"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenAction"
