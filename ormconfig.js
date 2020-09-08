@@ -1,3 +1,6 @@
+const path = process.env.NODE_ENV === "production" ? "dist" : "src";
+const ext = process.env.NODE_ENV === "production" ? "js" : "ts";
+
 module.exports = {
   type: "postgres",
 
@@ -7,9 +10,9 @@ module.exports = {
   password: process.env.DB_PASS,
   database: process.env.DB_DATABASE,
 
-  entities: ["./src/app/modules/**/entities/*.ts"],
-  migrations: ["./src/database/migrations/*.ts"],
+  entities: [`./${path}/app/modules/**/entities/*.${ext}`],
+  migrations: [`./${path}/database/migrations/*.${ext}`],
   cli: {
-    migrationsDir: "./src/database/migrations",
+    migrationsDir: `./${path}/database/migrations`,
   },
 };

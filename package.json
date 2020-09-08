@@ -5,7 +5,9 @@
   "author": "Manfrinmm <matheus_mm123@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": " cross-env NODE_ENV=development tsnd --respawn --transpile-only --ignore-watch node_modules .",
+    "dev": "cross-env NODE_ENV=development tsnd --respawn --transpile-only --ignore-watch node_modules .",
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
     "test": "jest",
     "typeorm": "tsnd ./node_modules/typeorm/cli.js"
   },
@@ -35,6 +37,7 @@
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.3.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
@@ -46,6 +49,13 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
     "@commitlint/cli": "^9.1.2",
     "@commitlint/config-conventional": "^9.1.2",
     "@types/bcryptjs": "^2.4.2",
@@ -56,8 +66,8 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^3.10.0",
     "@typescript-eslint/parser": "^3.10.0",
+    "babel-plugin-transform-typescript-metadata": "^0.3.0",
     "commitizen": "^4.2.0",
-    "cross-env": "^7.0.2",
     "cz-conventional-changelog": "3.2.1",
     "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
@@ -70,7 +80,7 @@
     "jest": "^26.4.2",
     "lint-staged": "^10.2.11",
     "prettier": "^2.1.0",
-    "ts-jest": "^26.2.0",
+    "ts-jest": "^26.3.0",
     "ts-node-dev": "^1.0.0-pre.60",
     "typescript": "^4.0.2"
   }
