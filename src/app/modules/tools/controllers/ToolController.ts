@@ -48,7 +48,7 @@ export default class ToolController {
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
-    const tool_id = Number(req.params.id);
+    const tool_id = Number(req.params.tool_id);
 
     const user_id = req.user.id;
 
@@ -69,7 +69,7 @@ export default class ToolController {
   }
 
   public async destroy(req: Request, res: Response): Promise<Response> {
-    const tool_id = Number(req.params.id);
+    const tool_id = Number(req.params.tool_id);
 
     const user_id = req.user.id;
     const deleteTool = container.resolve(DeleteToolService);

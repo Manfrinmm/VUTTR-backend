@@ -28,7 +28,7 @@ export default class UpdateToolService {
     }
 
     if (tool.user_id !== user_id) {
-      throw new AppError("You are not allowed to delete this tool.", 401);
+      throw new AppError("You are not allowed to delete this tool.", 403);
     }
 
     const toolUpdated = await this.toolsRepository.update({

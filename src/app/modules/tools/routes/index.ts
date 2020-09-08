@@ -11,7 +11,7 @@ toolRoutes.use(ensureAuthenticatedUser);
 
 toolRoutes.get("/", toolController.index);
 toolRoutes.post("/", toolController.create);
-toolRoutes.put("/:id", toolController.update);
-toolRoutes.delete("/:id", toolController.destroy);
+toolRoutes.put("/:tool_id", toolController.update);
+toolRoutes.delete("/:tool_id", toolController.destroy);
 
 export default toolRoutes;

@@ -23,7 +23,7 @@ export default class DeleteToolService {
     }
 
     if (tool.user_id !== user_id) {
-      throw new AppError("You are not allowed to delete this tool.", 401);
+      throw new AppError("You are not allowed to delete this tool.", 403);
     }
 
     await this.toolsRepository.delete(tool);
