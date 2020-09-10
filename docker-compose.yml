@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  vuttr-server:
+    build: .
+    container_name: vuttr-server
+    command: yarn dev
+    restart: always
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - .:/usr/app
+    environment:
+      - DB_HOST=vuttr-db-postgres
+    depends_on:
+      - vuttr-db-postgres
+
+  vuttr-db-postgres:
+    image: bitnami/postgresql:latest
+    restart: always
+    container_name: vuttr-db-postgres
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRESQL_USERNAME: ${DB_USER}
+      POSTGRESQL_PASSWORD: ${DB_PASS}
+      POSTGRESQL_DATABASE: ${DB_DATABASE}
+    volumes:
+      - ./docker/volumes/pgdata:/bitnami/postgresql

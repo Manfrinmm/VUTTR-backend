@@ -5,3 +5,5 @@ dist
 
 .env
 yarn-error.log
+
+docker
