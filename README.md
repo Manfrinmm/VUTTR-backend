@@ -10,7 +10,7 @@
 
 [Introdução](#-Introdução)
 | [Tecnologias usadas](#-Tecnologias-usadas)
-| [Requisitos mínimos](#-Requisitos-mínimos)
+| [Requisitos mínimos](#-Requisitos-mínimos-para-rodar-o-projeto-localmente)
 | [Como utilizar](#-Como-utilizar-localmente)
 | [Status do projeto](#-Status-do-projeto)
 
