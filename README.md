@@ -10,7 +10,8 @@
 
 [Introdução](#-Introdução)
 | [Tecnologias usadas](#-Tecnologias-usadas)
-| [Como utilizar localmente](#-Como-utilizar-localmente)
+| [Requisitos mínimos](#-Requisitos-mínimos)
+| [Como utilizar](#-Como-utilizar-localmente)
 | [Status do projeto](#-Status-do-projeto)
 
 Projeto construído com conhecimentos em Node.js, Typescript e alguns patterns como SOLID, DDD e TDD.
@@ -66,7 +67,7 @@ Para utilizar documentação de referência no insomnia basta clicar no batão a
 - Gerenciador de pacotes do Node, [Npm](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/).
 - Ter uma instância do PostgreSQL para que o typeorm possa se conectar
 
-# Como utilizar localmente
+# 🤹‍♂️ Como utilizar localmente
 
 - Clone o repositório:
 
