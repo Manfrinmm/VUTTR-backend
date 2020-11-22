@@ -4,7 +4,7 @@ services:
   vuttr-server:
     build: .
     container_name: vuttr-server
-    command: yarn dev
+    command: yarn start
     restart: always
     ports:
       - ${APP_PORT}:${APP_PORT}
