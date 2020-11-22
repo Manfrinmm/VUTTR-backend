@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # Correção temporária enquanto os outros `steps` não são atualizados
+      - name: ACTIONS_ALLOW_UNSECURE_COMMANDS
+        id: ACTIONS_ALLOW_UNSECURE_COMMANDS
+        run: echo 'ACTIONS_ALLOW_UNSECURE_COMMANDS=true' >> $GITHUB_ENV
+
       # Instalar o Node para prosseguir com action
       - name: Setup NodeJs environment
         uses: actions/setup-node@v1.4.3
