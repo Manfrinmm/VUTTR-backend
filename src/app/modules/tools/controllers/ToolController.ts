@@ -12,6 +12,7 @@ export default class ToolController {
     const user_id = req.user.id;
 
     const tags = req.query.tags as string;
+    const title = req.query.title as string;
 
     let filterTags;
 
@@ -24,6 +25,7 @@ export default class ToolController {
     const tools = await showToolsByUser.execute({
       user_id,
       tags: filterTags,
+      title,
     });
 
     return res.status(200).json(tools);

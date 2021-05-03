@@ -42,31 +42,34 @@ export default class ToolsRepository implements IToolsRepository {
   public async findAllByUser({
     user_id,
     tags,
+    title,
   }: IFindToolByUserDTO): Promise<Tool[]> {
-    let tools: Tool[] = [];
-
-    tools = await this.ormRepository.find({
+    const tools = await this.ormRepository.find({
       where: { user_id },
     });
 
-    let toolsFiltered: Tool[] = tools;
+    let toolsFiltered = tools;
 
-    if (tools.length > 0 && tags?.length > 0) {
-      toolsFiltered = [];
+    if (tools.length > 0) {
+      if (tags?.length > 0) {
+        toolsFiltered = [];
 
-      tools.forEach(tool => {
-        tool.tags.forEach(tag => {
-          if (tags.includes(tag)) {
-            const toolFilteredAlreadyAdded = toolsFiltered.find(
-              toolFiltered => toolFiltered.id === tool.id,
-            );
+        tools.forEach(tool => {
+          tool.tags.forEach(tag => {
+            if (tags.includes(tag)) {
+              const toolFilteredAlreadyAdded = toolsFiltered.find(
+                toolFiltered => toolFiltered.id === tool.id,
+              );
 
-            if (!toolFilteredAlreadyAdded) {
-              toolsFiltered.push(tool);
+              if (!toolFilteredAlreadyAdded) {
+                toolsFiltered.push(tool);
+              }
             }
-          }
+          });
         });
-      });
+      } else if (title) {
+        toolsFiltered = tools.filter(tool => tool.title.includes(title));
+      }
     }
 
     return toolsFiltered;
